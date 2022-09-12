@@ -7,6 +7,9 @@ public class Application {
         Recipe recipe = new Recipe();
 
         recipe.createRecipe();
+        recipe.createRecipe();
+        recipe.createRecipe();
+        recipe.createRecipe();
 
         new KitchenApp();
     }

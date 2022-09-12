@@ -134,6 +134,7 @@ public class Fridge {
         for (var ingredient : weightedIngredientList) {
             System.out.println(ingredient);
         }
+        System.out.println(" ");
     }
 
     @Override

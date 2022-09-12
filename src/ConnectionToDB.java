@@ -146,6 +146,7 @@ public class ConnectionToDB {
         for (int i = 0; i < allRecipes.size(); i++) {
             System.out.println("Recipe ID = " + i + " " +allRecipes.get(i).toString());
         }
+        System.out.println(" ");
     }
 
     public static void initializeRecipes() {

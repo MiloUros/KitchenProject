@@ -5,7 +5,7 @@ public class KitchenApp {
     private final Fridge fridge = new Fridge();
 
     public KitchenApp() {
-        ConnectionToDB.initializeRecipes();
+//        ConnectionToDB.initializeRecipes();
         System.out.println("All right, you've done a great job, now the fun begins!");
         boolean isTrue = true;
         while (isTrue) {
@@ -65,12 +65,14 @@ public class KitchenApp {
                     }
                 }
                 case 9 -> {
-                    ConnectionToDB.allRecipes.sort((o1, o2) -> o1.getPrice() == o2.getPrice() ? 0 : 1);
-                    printList(ConnectionToDB.allRecipes);
+                    List<Recipe> sortedRecipes = ConnectionToDB.allRecipes;
+                    sortedRecipes.sort((o1, o2) -> o1.getPrice() == o2.getPrice() ? 0 : 1);
+                    printList(sortedRecipes);
                 }
                 case 10 -> {
-                    ConnectionToDB.allRecipes.sort(Comparator.comparing(Recipe::getDifficulty));
-                    printList(ConnectionToDB.allRecipes);
+                    List<Recipe> sortedRecipes = ConnectionToDB.allRecipes;
+                    sortedRecipes.sort(Comparator.comparing(Recipe::getDifficulty));
+                    printList(sortedRecipes);
                 }
                 case 11 -> {
                     fridge.printAllWeightedIngredients();
@@ -100,8 +102,8 @@ public class KitchenApp {
         System.out.println("Enter 6 to check all the meals u can make whit X money!");
         System.out.println("Enter 7 to check all the meals that have X difficulty to make");
         System.out.println("Enter 8 to combine 6 and 7");
-        System.out.println("Enter 9 to sort recipes by weight");
-        System.out.println("Enter 10 to sort recipes by price");
+        System.out.println("Enter 9 to sort recipes by price");
+        System.out.println("Enter 9 to sort recipes by difficulty");
         System.out.println("Enter 11 to print all the ingredients from the fridge!");
     }
 

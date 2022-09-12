@@ -56,13 +56,14 @@ public class Recipe implements Priceable {
         return new Recipe(this.getRecipeName(), this.getDifficulty(), scaledWeight);
     }
 
-    public void addIngredient() {
+    public List<WeightedIngredient> addIngredient() {
+        List<WeightedIngredient> weightedIngredients = new ArrayList<>();
         while (true) {
             ConnectionToDB.printAllIngredientsFromDB();
-            System.out.println("Enter a id number from 0 to" + (ConnectionToDB.elementsCount() - 1) +" to add Ingredient");
+            System.out.println("Enter a id number from 0 to " + (ConnectionToDB.elementsCount() - 1) +" to add Ingredient");
             int id = scanner.nextInt();
             if (id >= 0 && id <= (ConnectionToDB.elementsCount() - 1)) {
-                weightedIngredientList.add(ConnectionToDB.ingredientFromDBById(id));
+                weightedIngredients.add(ConnectionToDB.ingredientFromDBById(id));
             } else {
                 System.out.println("Wrong input, enter numbers from 0 to 14");
             }
@@ -72,6 +73,7 @@ public class Recipe implements Priceable {
                 break;
             }
         }
+        return weightedIngredients;
     }
 
     public void deleteIngredient() {
@@ -122,8 +124,8 @@ public class Recipe implements Priceable {
                 }
             }
         }
-        addIngredient();
-        ConnectionToDB.allRecipes.add(new Recipe(recipeName, difficulty, weightedIngredientList));
+        List<WeightedIngredient> weightedIngredients = addIngredient();
+        ConnectionToDB.allRecipes.add(new Recipe(recipeName, difficulty, weightedIngredients));
     }
 
     public String weightedIngredientsPrint() {
@@ -132,6 +134,8 @@ public class Recipe implements Priceable {
             allIngredients.append(ingredient.toString());
             allIngredients.append("\n");
         }
+        allIngredients.append("Total Cost: ").append(getPrice());
+        allIngredients.append("\n");
         return allIngredients.toString();
     }
 
