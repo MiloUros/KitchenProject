@@ -5,7 +5,7 @@ public class KitchenApp {
     private final Fridge fridge = new Fridge();
 
     public KitchenApp() {
-//        ConnectionToDB.initializeRecipes();
+        ConnectionToDB.initializeRecipes();
         System.out.println("All right, you've done a great job, now the fun begins!");
         boolean isTrue = true;
         while (isTrue) {
