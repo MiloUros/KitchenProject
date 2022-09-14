@@ -24,11 +24,13 @@ public class Fridge {
                     if (ConnectionToDB.isWeightedIngredientFromDBById(id)) {
                         System.out.println("U already have this ingredient, how much grams u want to add(1 = 1000g)?");
                         double weightToAdd = scanner.nextDouble();
-                        hasIngredient(ConnectionToDB.ingredientNameFromDBById(id)).setWeight(hasIngredient(ConnectionToDB.ingredientNameFromDBById(id)).getWeight() + weightToAdd);
+                        hasIngredient(ConnectionToDB.ingredientNameFromDBById(id)).
+                                setWeight(hasIngredient(ConnectionToDB.ingredientNameFromDBById(id)).getWeight() + weightToAdd);
                     } else {
                         System.out.println("U already have this ingredient, how much items u want to add?");
                         int numberOfItemsToAdd = scanner.nextInt();
-                        hasIngredient(ConnectionToDB.ingredientNameFromDBById(id)).setWeight(hasIngredient(ConnectionToDB.ingredientNameFromDBById(id)).getWeight() + numberOfItemsToAdd);
+                        hasIngredient(ConnectionToDB.ingredientNameFromDBById(id)).
+                                setWeight(hasIngredient(ConnectionToDB.ingredientNameFromDBById(id)).getWeight() + numberOfItemsToAdd);
                     }
                 } else {
                     if (ConnectionToDB.isWeightedIngredientFromDBById(id)) {

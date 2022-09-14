@@ -6,6 +6,7 @@ import java.util.Scanner;
 public class ConnectionToDB {
     static Connection connection = null;
     static List<Recipe> allRecipes = new ArrayList<>();
+    static List<Recipe> favouriteRecipes = new ArrayList<>();
 
     public static Connection connectDB() {
         try {
@@ -145,6 +146,13 @@ public class ConnectionToDB {
     public static void printAllRecipes() {
         for (int i = 0; i < allRecipes.size(); i++) {
             System.out.println("Recipe ID = " + i + " " +allRecipes.get(i).toString());
+        }
+        System.out.println(" ");
+    }
+
+    public static void printAllFavouriteRecipes() {
+        for (int i = 0; i < favouriteRecipes.size(); i++) {
+            System.out.println("Recipe ID = " + i + " " +favouriteRecipes.get(i).toString());
         }
         System.out.println(" ");
     }

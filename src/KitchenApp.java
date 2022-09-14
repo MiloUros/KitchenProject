@@ -41,7 +41,7 @@ public class KitchenApp {
                     makeAMeal();
                 }
                 case 6 -> {
-                    List<Recipe> recipesWithXMoney = allTheMealsUCanMakeWithXMoney();
+                    List<Recipe> recipesWithXMoney = allTheMealsUCanMakeWithXMoney(ConnectionToDB.allRecipes);
                     if (recipesWithXMoney.isEmpty()) {
                         System.out.println("No recipes");
                     } else {
@@ -57,7 +57,7 @@ public class KitchenApp {
                     }
                 }
                 case 8 -> {
-                    List<Recipe> recipesWithXDifficultAndXMoney = allTheMealsWithXDifficultyAndXMoney();
+                    List<Recipe> recipesWithXDifficultAndXMoney = allTheMealsWithXDifficultyAndXMoney(ConnectionToDB.allRecipes);
                     if (recipesWithXDifficultAndXMoney.isEmpty()) {
                         System.out.println("No recipes");
                     } else {
@@ -66,16 +66,39 @@ public class KitchenApp {
                 }
                 case 9 -> {
                     List<Recipe> sortedRecipes = ConnectionToDB.allRecipes;
-                    sortedRecipes.sort((o1, o2) -> o1.getPrice() == o2.getPrice() ? 0 : 1);
+                    sortedRecipes.sort((Comparator.comparing(Recipe::getPrice)));
                     printList(sortedRecipes);
                 }
                 case 10 -> {
                     List<Recipe> sortedRecipes = ConnectionToDB.allRecipes;
-                    sortedRecipes.sort(Comparator.comparing(Recipe::getDifficulty));
+                    sortedRecipes.sort((Comparator.comparing(Recipe::getDifficulty)));
                     printList(sortedRecipes);
                 }
                 case 11 -> {
                     fridge.printAllWeightedIngredients();
+                }
+                case 12 -> {
+                    addIngredientsToARecipe();
+                }
+                case 13 -> {
+                    deleteIngredientFromARecipe();
+                }
+                case 14 -> {
+                    addToFavouriteRecipes();
+                }
+                case 15 -> {
+                    deleteFromFavouriteRecipes();
+                }
+                case 16 -> {
+                    ConnectionToDB.printAllFavouriteRecipes();
+                }
+                case 17 -> {
+                    List<Recipe> recipesWithXMoney = allTheMealsUCanMakeWithXMoney(ConnectionToDB.favouriteRecipes);
+                    if (recipesWithXMoney.isEmpty()) {
+                        System.out.println("No recipes");
+                    } else {
+                        printList(recipesWithXMoney);
+                    }
                 }
                 default -> {
                     System.out.println("Wrong input!");
@@ -103,17 +126,37 @@ public class KitchenApp {
         System.out.println("Enter 7 to check all the meals that have X difficulty to make");
         System.out.println("Enter 8 to combine 6 and 7");
         System.out.println("Enter 9 to sort recipes by price");
-        System.out.println("Enter 9 to sort recipes by difficulty");
+        System.out.println("Enter 10 to sort recipes by difficulty");
         System.out.println("Enter 11 to print all the ingredients from the fridge!");
+        System.out.println("Enter 12 to add ingredient to recipe!");
+        System.out.println("Enter 13 to delete ingredient from recipe!");
+        System.out.println("Enter 14 to add a recipe to favorite recipes!");
+        System.out.println("Enter 15 to delete a recipe from favorite recipes!");
+        System.out.println("Enter 16 to print out all favourite recipes!");
+        System.out.println("Enter 17 to print favorite recipes to x price!");
     }
 
-    public List<Recipe> allTheMealsUCanMakeWithXMoney() {
+    public void addToFavouriteRecipes() {
+        ConnectionToDB.printAllRecipes();
+        System.out.println("Enter te id of the recipe u want to add to favourite: ");
+        int id = scanner.nextInt();
+        ConnectionToDB.favouriteRecipes.add(ConnectionToDB.allRecipes.get(id));
+    }
+
+    public void deleteFromFavouriteRecipes() {
+        ConnectionToDB.printAllFavouriteRecipes();
+        System.out.println("Enter te id of the recipe u want to delete from favourite: ");
+        int id = scanner.nextInt();
+        ConnectionToDB.favouriteRecipes.remove(id);
+    }
+
+    public List<Recipe> allTheMealsUCanMakeWithXMoney(List<Recipe> recipeArrayList) {
         System.out.println("Enter the amount of money u have for the meal!");
         double money = scanner.nextDouble();
         List<Recipe> meals = new ArrayList<>();
-        for (int i = 0; i < ConnectionToDB.allRecipes.size(); i++) {
-            if (ConnectionToDB.allRecipes.get(i).getPrice() <= money) {
-                meals.add(ConnectionToDB.allRecipes.get(i));
+        for (Recipe recipe : recipeArrayList) {
+            if (recipe.getPrice() <= money) {
+                meals.add(recipe);
             }
         }
         return meals;
@@ -172,16 +215,18 @@ public class KitchenApp {
 
     public List<Recipe> allScaledMealsUCanMakeFromFridge() {
         List<Recipe> meals = new ArrayList<>();
+        System.out.println("Enter the scale of your recipe(From 0 to 1): ");
+        double scale = scanner.nextDouble();
         for (int i = 0; i < ConnectionToDB.allRecipes.size(); i++) {
-            if (fridge.canMakeAMeal(ConnectionToDB.allRecipes.get(i).getScaledRecipe(0.5))) {
-                meals.add(ConnectionToDB.allRecipes.get(i).getScaledRecipe(0.5));
+            if (fridge.canMakeAMeal(ConnectionToDB.allRecipes.get(i).getScaledRecipe(scale))) {
+                meals.add(ConnectionToDB.allRecipes.get(i).getScaledRecipe(scale));
             }
         }
         return meals;
     }
 
-    public List<Recipe> allTheMealsWithXDifficultyAndXMoney() {
-        List<Recipe> mealsWithXMoney = allTheMealsUCanMakeWithXMoney();
+    public List<Recipe> allTheMealsWithXDifficultyAndXMoney(List<Recipe> recipeList) {
+        List<Recipe> mealsWithXMoney = allTheMealsUCanMakeWithXMoney(recipeList);
         List<Recipe> mealsWithXDifficulty = allTheMealsWithXDifficulty();
         List<Recipe> combination = new ArrayList<>();
         for (var meal : mealsWithXMoney) {
@@ -198,5 +243,21 @@ public class KitchenApp {
         for (var meal : meals) {
             System.out.println(meal);
         }
+    }
+
+    public void addIngredientsToARecipe() {
+        ConnectionToDB.printAllRecipes();
+        System.out.println("Enter ID of a recipe u want to add ingredients to:");
+        int id = scanner.nextInt();
+        Recipe recipe = ConnectionToDB.allRecipes.get(id);
+        recipe.addIngredientToRecipe();
+    }
+
+    public void deleteIngredientFromARecipe() {
+        ConnectionToDB.printAllRecipes();
+        System.out.println("Enter ID of a recipe u want to delete ingredient from:");
+        int id = scanner.nextInt();
+        Recipe recipe = ConnectionToDB.allRecipes.get(id);
+        recipe.deleteIngredientFromRecipe();
     }
 }

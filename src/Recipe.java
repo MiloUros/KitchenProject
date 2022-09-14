@@ -76,7 +76,25 @@ public class Recipe implements Priceable {
         return weightedIngredients;
     }
 
-    public void deleteIngredient() {
+    public void addIngredientToRecipe() {
+        while (true) {
+            ConnectionToDB.printAllIngredientsFromDB();
+            System.out.println("Enter a id number from 0 to " + (ConnectionToDB.elementsCount() - 1) +" to add Ingredient");
+            int id = scanner.nextInt();
+            if (id >= 0 && id <= (ConnectionToDB.elementsCount() - 1)) {
+                weightedIngredientList.add(ConnectionToDB.ingredientFromDBById(id));
+            } else {
+                System.out.println("Wrong input, enter numbers from 0 to 14");
+            }
+            System.out.println("If u are done whit your ingredients pls enter 'exit' or 'add' if u want to add more ingredients.");
+            String exit = scanner.next();
+            if (exit.equals("exit")) {
+                break;
+            }
+        }
+    }
+
+    public void deleteIngredientFromRecipe() {
         int id = 0;
         for (var ingredient : weightedIngredientList) {
             System.out.println(ingredient + "ID = " + id++);

@@ -1,7 +1,5 @@
-import java.util.Scanner;
 
 public class Application {
-    private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
         Recipe recipe = new Recipe();
